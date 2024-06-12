@@ -1,0 +1,22 @@
+package layouts
+
+import "github.com/guillembonet/bunetz/views/components"
+
+templ Base() {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<title>Bunetz</title>
+			<link rel="icon" type="image/x-icon" href="/public/favicon.ico"/>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<script src="/assets/js/htmx.min.js"></script>
+			<script src="/assets/js/alpine.min.js"></script>
+			<link href="/assets/css/tailwind.css" rel="stylesheet"/>
+		</head>
+		<body class="antialiased min-h-screen flex flex-col">
+			@components.Navigation()
+			{ children... }
+		</body>
+	</html>
+}
