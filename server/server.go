@@ -29,7 +29,7 @@ func NewServer(addr string, handler ...Handler) (*Server, error) {
 	rg := g.Group("/")
 
 	g.NoRoute(func(c *gin.Context) {
-		c.HTML(http.StatusNotFound, "", not_found.NotFound())
+		c.HTML(http.StatusNotFound, "", WithBase(c, not_found.NotFound()))
 	})
 
 	for _, h := range handler {

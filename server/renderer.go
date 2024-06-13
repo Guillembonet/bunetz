@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"log/slog"
 	"net/http"
 
 	"github.com/a-h/templ"
@@ -28,9 +29,14 @@ type renderer struct {
 
 func (r renderer) Render(w http.ResponseWriter) error {
 	if r.component == nil {
+		slog.Error("got nil component")
 		return nil
 	}
-	return r.component.Render(r.ctx, w)
+	err := r.component.Render(r.ctx, w)
+	if err != nil {
+		slog.Error("error rendering component", slog.Any("err", err))
+	}
+	return err
 }
 
 func (r renderer) WriteContentType(w http.ResponseWriter) {

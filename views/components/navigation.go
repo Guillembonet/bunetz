@@ -9,5 +9,4 @@ var NavigationLinks = []NavigationLink{
 	{Text: "Blog", Href: "/blog"},
 	{Text: "About me", Href: "/about-me"},
 	{Text: "About this website", Href: "/about-this-website"},
-	{Text: "Echo", Href: "/echo"},
 }

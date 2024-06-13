@@ -16,7 +16,19 @@ templ Base() {
 		</head>
 		<body class="antialiased min-h-screen flex flex-col">
 			@components.Navigation()
-			{ children... }
+			<div id="content" class="flex flex-grow">
+				{ children... }
+			</div>
 		</body>
 	</html>
+}
+
+templ WithBase(component templ.Component, fullPage bool) {
+	if fullPage {
+		@Base() {
+			@component
+		}
+	} else {
+		@component
+	}
 }

@@ -12,7 +12,7 @@ templ Navigation() {
                                 .letter { fill: #ffffff; font-family: Arial, sans-serif; font-size: 72px; font-weight: bold; }
                             </style>
 							<circle class="background" cx="50" cy="50" r="50"></circle>
-							<text class="letter" x="50%" y="50%" text-anchor="middle" alignment-baseline="central" dy=".1em">B</text>
+							<text class="letter" x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" dy=".1em">B</text>
 						</svg>
 					</a>
 					<!-- Mobile menu button -->
@@ -28,7 +28,7 @@ templ Navigation() {
 					</div>
 				</div>
 				<div x-cloak :class="[isOpen ? 'translate-x-0 opacity-100 ' : 'opacity-0 -translate-x-full']" class="absolute inset-x-0 z-20 flex-1 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white dark:bg-gray-800 lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center lg:justify-between">
-					<div class="flex flex-col text-gray-600 capitalize dark:text-gray-300 lg:flex lg:px-16 lg:-mx-4 lg:flex-row lg:items-center">
+					<div hx-boost="true" hx-target="#content" class="flex flex-col text-gray-600 capitalize dark:text-gray-300 lg:flex lg:px-16 lg:flex-row lg:items-center">
 						for _, link := range NavigationLinks {
 							<a href={ templ.URL(link.Href) } class="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200">{ link.Text }</a>
 						}
