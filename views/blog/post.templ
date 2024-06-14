@@ -1,0 +1,10 @@
+package blog
+
+templ Post(title string, content []byte) {
+	<div class="container mx-auto mt-4 xl:px-40 lg:px-20 md:px-10 px-2">
+		<h1 class="text-4xl mb-5">{ title }</h1>
+		<div class="markdown-body">
+			@templ.Raw(string(content))
+		</div>
+	</div>
+}

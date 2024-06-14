@@ -2,13 +2,16 @@ package server
 
 import (
 	"context"
+	"fmt"
+	"io/fs"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/guillembonet/bunetz/blog_posts"
 	"github.com/guillembonet/bunetz/server/middleware"
 	"github.com/guillembonet/bunetz/views/assets"
-	"github.com/guillembonet/bunetz/views/not_found"
+	"github.com/guillembonet/bunetz/views/error_pages"
 )
 
 type Server struct {
@@ -26,10 +29,16 @@ func NewServer(addr string, handler ...Handler) (*Server, error) {
 
 	g.StaticFS("assets", http.FS(assets.Assets))
 
+	blogPostsAssets, err := fs.Sub(blog_posts.BlogPostAssets, "assets")
+	if err != nil {
+		return nil, fmt.Errorf("failed to get blog posts assets: %w", err)
+	}
+	g.StaticFS("blog/assets", http.FS(blogPostsAssets))
+
 	rg := g.Group("/")
 
 	g.NoRoute(func(c *gin.Context) {
-		c.HTML(http.StatusNotFound, "", WithBase(c, not_found.NotFound()))
+		c.HTML(http.StatusNotFound, "", WithBase(c, error_pages.NotFound(), nil))
 	})
 
 	for _, h := range handler {

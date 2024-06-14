@@ -16,8 +16,9 @@ func main() {
 	slog.SetLogLoggerLevel(slog.LevelDebug)
 
 	static := handlers.NewStatic()
+	blog := handlers.NewBlog()
 
-	server, err := server.NewServer(":8080", static)
+	server, err := server.NewServer(":8080", static, blog)
 	if err != nil {
 		slog.Error("failed to create server", slog.Any("err", err))
 		os.Exit(1)

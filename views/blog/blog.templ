@@ -1,7 +1,14 @@
 package blog
 
-templ Blog() {
+import "github.com/guillembonet/bunetz/blog_posts"
+
+templ Blog(blogPosts []blog_posts.BlogPost) {
 	<div class="container mx-auto mt-4">
 		Welcome sdfsdf
+		for _, post := range blogPosts {
+			<div hx-boost="true" hx-target="#content" class="bg-white shadow-md rounded p-4 mt-4">
+				<a href={ templ.URL("/blog/posts/" + post.ID) } class="text-2xl font-bold">{ post.Title }</a>
+			</div>
+		}
 	</div>
 }

@@ -23,7 +23,7 @@ func AboutWebsite() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container mx-auto mt-4\">This website has been created with templ+go stack (using htmx, alpinejs and tailwindcss).</div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container mx-auto mt-4\"><p>Why is this website so fast? Because it has been created with templ+go stack (using htmx, alpinejs and tailwindcss).</p><p clas=\"mt-4\">Also, this website is running on my 2-Raspberry Pi cluster (k3s) at home, but it is proxied so you don't know my IP :)</p></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

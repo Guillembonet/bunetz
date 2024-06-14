@@ -2,11 +2,15 @@ package layouts
 
 import "github.com/guillembonet/bunetz/views/components"
 
-templ Base() {
+const (
+	defaultTitle = "Bunetz"
+)
+
+templ Base(title *string) {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
-			<title>Bunetz</title>
+			<title>{ getTitle(title) }</title>
 			<link rel="icon" type="image/x-icon" href="/public/favicon.ico"/>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -16,19 +20,27 @@ templ Base() {
 		</head>
 		<body class="antialiased min-h-screen flex flex-col">
 			@components.Navigation()
-			<div id="content" class="flex flex-grow">
+			<div id="content" class="flex flex-grow" hx-on:htmx:before-swap="event.detail.shouldSwap = true; event.detail.isError = false;">
 				{ children... }
 			</div>
 		</body>
 	</html>
 }
 
-templ WithBase(component templ.Component, fullPage bool) {
+templ WithBase(component templ.Component, title *string, fullPage bool) {
 	if fullPage {
-		@Base() {
+		@Base(title) {
 			@component
 		}
 	} else {
+		<title>{ getTitle(title) }</title>
 		@component
 	}
+}
+
+func getTitle(title *string) string {
+	if title == nil || *title == "" {
+		return defaultTitle
+	}
+	return *title
 }
