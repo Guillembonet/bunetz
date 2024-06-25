@@ -23,6 +23,8 @@ type Handler interface {
 }
 
 func NewServer(addr string, handler ...Handler) (*Server, error) {
+	gin.SetMode(gin.ReleaseMode)
+
 	g := gin.New()
 	g.Use(middleware.Logger, gin.Recovery(), middleware.AssetsCache)
 	g.HTMLRender = &templRenderer{}
