@@ -28,6 +28,6 @@ func requestsFullPage(c *gin.Context) bool {
 	return restoreRequest
 }
 
-func WithBase(c *gin.Context, component templ.Component, title *string) templ.Component {
-	return layouts.WithBase(component, title, requestsFullPage(c))
+func WithBase(c *gin.Context, component templ.Component, title, description string) templ.Component {
+	return layouts.WithBase(component, title, description, requestsFullPage(c))
 }

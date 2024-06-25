@@ -17,19 +17,26 @@ var postsFiles embed.FS
 var BlogPostAssets embed.FS
 
 type BlogPost struct {
-	ID    string
-	Title string
+	ID          string
+	Title       string
+	Description string
+	Live        bool
 }
 
 var BlogPosts = []BlogPost{
-	{ID: "how_i_overengineered_my_cluster_part_1", Title: "How I overengineered my Home Kubernetes Cluster"},
+	{
+		ID:          "how-i-overengineered-my-cluster-part-1",
+		Title:       "How I overengineered my Home Kubernetes Cluster",
+		Description: "A series of posts about how I overengineered my home Kubernetes cluster.",
+		Live:        false,
+	},
 }
 
 var BlogPostsByID = make(map[string]BlogPost, len(BlogPosts))
 
-func GetBlogPostHtml(id string) ([]byte, error) {
-	_, ok := BlogPostsByID[id]
-	if !ok {
+func GetLiveBlogPostHtml(id string) ([]byte, error) {
+	post, ok := BlogPostsByID[id]
+	if !ok || !post.Live {
 		return nil, ErrPostNotFound
 	}
 	file, err := postsFiles.Open(fmt.Sprintf("%s.md", id))

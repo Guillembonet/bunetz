@@ -24,21 +24,21 @@ type Handler interface {
 
 func NewServer(addr string, handler ...Handler) (*Server, error) {
 	g := gin.New()
-	g.Use(middleware.Logger, gin.Recovery())
+	g.Use(middleware.Logger, gin.Recovery(), middleware.AssetsCache)
 	g.HTMLRender = &templRenderer{}
 
-	g.StaticFS("assets", http.FS(assets.Assets))
+	g.StaticFS("/assets", http.FS(assets.Assets))
 
 	blogPostsAssets, err := fs.Sub(blog_posts.BlogPostAssets, "assets")
 	if err != nil {
 		return nil, fmt.Errorf("failed to get blog posts assets: %w", err)
 	}
-	g.StaticFS("blog/assets", http.FS(blogPostsAssets))
+	g.StaticFS("/blog/assets", http.FS(blogPostsAssets))
 
 	rg := g.Group("/")
 
 	g.NoRoute(func(c *gin.Context) {
-		c.HTML(http.StatusNotFound, "", WithBase(c, error_pages.NotFound(), nil))
+		c.HTML(http.StatusNotFound, "", WithBase(c, error_pages.NotFound(), "Not found", ""))
 	})
 
 	for _, h := range handler {

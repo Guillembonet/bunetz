@@ -2,13 +2,30 @@ package blog
 
 import "github.com/guillembonet/bunetz/blog_posts"
 
+func onlyLive(blogPosts []blog_posts.BlogPost) []blog_posts.BlogPost {
+	var livePosts []blog_posts.BlogPost
+	for _, post := range blogPosts {
+		if post.Live {
+			livePosts = append(livePosts, post)
+		}
+	}
+	return livePosts
+}
+
 templ Blog(blogPosts []blog_posts.BlogPost) {
 	<div class="container mx-auto mt-4">
-		Welcome sdfsdf
-		for _, post := range blogPosts {
-			<div hx-boost="true" hx-target="#content" class="bg-white shadow-md rounded p-4 mt-4">
-				<a href={ templ.URL("/blog/posts/" + post.ID) } class="text-2xl font-bold">{ post.Title }</a>
+		<h1 class="text-4xl mb-5">Welcome to my blog</h1>
+		<h2 class="text-2xl mb-3">Here you can find all my blog posts</h2>
+		if len(onlyLive(blogPosts)) == 0 {
+			<div class="bg-white shadow-md rounded p-4 mt-4">
+				<p>There are no blog posts yet</p>
 			</div>
+		} else {
+			for _, post := range onlyLive(blogPosts) {
+				<div hx-boost="true" hx-target="#content" class="bg-white shadow-md rounded p-4 mt-4">
+					<a href={ templ.URL("/blog/posts/" + post.ID) } class="text-2xl font-bold">{ post.Title }</a>
+				</div>
+			}
 		}
 	</div>
 }

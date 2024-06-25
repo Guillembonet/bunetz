@@ -6,19 +6,21 @@ const (
 	defaultTitle = "Bunetz"
 )
 
-templ Base(title *string) {
+templ Base(title, description string) {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
 			<title>{ getTitle(title) }</title>
-			<link rel="icon" type="image/x-icon" href="/public/favicon.ico"/>
-			<meta charset="UTF-8"/>
-			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<script src="/assets/js/htmx.min.js"></script>
-			<script src="/assets/js/alpine.min.js"></script>
-			<link href="/assets/css/tailwind.css" rel="stylesheet"/>
+			<link rel="icon" type="image/x-icon" href="/assets/favicon.ico" hx-preserve="true"/>
+			<meta charset="UTF-8" hx-preserve="true"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0" hx-preserve="true"/>
+			@descriptionMeta(description)
+			<script src="/assets/js/htmx.min.js" hx-preserve="true"></script>
+			<script src="/assets/js/head-support.min.js" hx-preserve="true" defer></script>
+			<script src="/assets/js/alpine.min.js" hx-preserve="true" defer></script>
+			<link href="/assets/css/tailwind.css" rel="stylesheet" hx-preserve="true"/>
 		</head>
-		<body class="antialiased min-h-screen flex flex-col">
+		<body class="antialiased min-h-screen flex flex-col" hx-ext="head-support">
 			@components.Navigation()
 			<div id="content" class="flex flex-grow" hx-on:htmx:before-swap="event.detail.shouldSwap = true; event.detail.isError = false;">
 				{ children... }
@@ -27,20 +29,29 @@ templ Base(title *string) {
 	</html>
 }
 
-templ WithBase(component templ.Component, title *string, fullPage bool) {
+templ WithBase(component templ.Component, title, description string, fullPage bool) {
 	if fullPage {
-		@Base(title) {
+		@Base(title, description) {
 			@component
 		}
 	} else {
-		<title>{ getTitle(title) }</title>
+		<head hx-head="merge">
+			<title>{ getTitle(title) }</title>
+			@descriptionMeta(description)
+		</head>
 		@component
 	}
 }
 
-func getTitle(title *string) string {
-	if title == nil || *title == "" {
+templ descriptionMeta(description string) {
+	if description != "" {
+		<meta name="description" content={ description }/>
+	}
+}
+
+func getTitle(title string) string {
+	if title == "" {
 		return defaultTitle
 	}
-	return *title
+	return title
 }
