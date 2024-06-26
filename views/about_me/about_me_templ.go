@@ -23,7 +23,7 @@ func AboutMe() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container mx-auto mt-4 text-lg\"><h1 class=\"text-4xl mb-6\">About me</h1><p class=\"mb-4\">My name is <b>Guillem Bonet</b> and I am a Software Engineer.</p><p class=\"mb-4\">My main language is Go.</p></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container text-lg mx-2 md:mx-auto mt-4\"><h1 class=\"text-4xl mb-6\">About me</h1><p class=\"mb-4\">My name is <b>Guillem Bonet</b> and I am a Software Engineer.</p><p class=\"mb-4\">My main language is Go.</p></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

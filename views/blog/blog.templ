@@ -13,9 +13,9 @@ func onlyLive(blogPosts []blog_posts.BlogPost) []blog_posts.BlogPost {
 }
 
 templ Blog(blogPosts []blog_posts.BlogPost) {
-	<div class="container mx-auto mt-4">
-		<h1 class="text-4xl mb-5">Welcome to my blog</h1>
-		<h2 class="text-2xl mb-3">Here you can find all my blog posts</h2>
+	<div class="container mx-2 md:mx-auto mt-4">
+		<h1 class="text-4xl mb-5">Blog</h1>
+		<h2 class="text-2xl mb-3">Welcome to my Blog! Here you can find all my blog posts</h2>
 		if len(onlyLive(blogPosts)) == 0 {
 			<div class="bg-white shadow-md rounded p-4 mt-4">
 				<p>There are no blog posts yet</p>

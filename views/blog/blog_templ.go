@@ -35,7 +35,7 @@ func Blog(blogPosts []blog_posts.BlogPost) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container mx-auto mt-4\"><h1 class=\"text-4xl mb-5\">Welcome to my blog</h1><h2 class=\"text-2xl mb-3\">Here you can find all my blog posts</h2>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container mx-2 md:mx-auto mt-4\"><h1 class=\"text-4xl mb-5\">Blog</h1><h2 class=\"text-2xl mb-3\">Welcome to my Blog! Here you can find all my blog posts</h2>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
