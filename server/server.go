@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"github.com/guillembonet/bunetz/blog_posts"
 	"github.com/guillembonet/bunetz/server/middleware"
@@ -26,7 +27,7 @@ func NewServer(addr string, handler ...Handler) (*Server, error) {
 	gin.SetMode(gin.ReleaseMode)
 
 	g := gin.New()
-	g.Use(middleware.Logger, gin.Recovery(), middleware.AssetsCache)
+	g.Use(middleware.Logger, gin.Recovery(), middleware.AssetsCache, gzip.Gzip(gzip.DefaultCompression))
 	g.HTMLRender = &templRenderer{}
 
 	g.StaticFS("/assets", http.FS(assets.Assets))
