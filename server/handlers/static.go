@@ -19,15 +19,13 @@ func NewStatic() *Static {
 
 func (*Static) AboutWebsite(c *gin.Context) {
 	c.HTML(http.StatusOK, "", server.WithBase(c, about_website.AboutWebsite(), "About this website",
-		"Information about this website."))
+		"General information about this website."))
 }
 
 func (*Static) AboutMe(c *gin.Context) {
 	c.HTML(http.StatusOK, "", server.WithBase(c, about_me.AboutMe(), "About me",
-		"Information about me."))
+		"Information about me, Guillem Bonet."))
 }
-
-var echoTitle = "Echo"
 
 func (*Static) Echo(c *gin.Context) {
 	echoValue, ok := c.GetQuery("echo")

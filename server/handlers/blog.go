@@ -18,9 +18,13 @@ func NewBlog() *Blog {
 	return &Blog{}
 }
 
+func (*Blog) Home(c *gin.Context) {
+	c.Redirect(http.StatusFound, "/blog")
+}
+
 func (*Blog) Blog(c *gin.Context) {
-	c.HTML(http.StatusOK, "", server.WithBase(c, blog.Blog(blog_posts.BlogPosts), "Blog",
-		"Blog posts about various topics."))
+	c.HTML(http.StatusOK, "", server.WithBase(c, blog.Blog(blog_posts.BlogPosts), "Bunetz blog",
+		"Blog posts about various topics related to software engineering."))
 }
 
 func (*Blog) BlogPost(c *gin.Context) {
@@ -43,7 +47,7 @@ func (*Blog) BlogPost(c *gin.Context) {
 }
 
 func (s *Blog) Register(r *gin.RouterGroup) {
-	r.GET("/", s.Blog)
+	r.GET("/", s.Home)
 	r.GET("/blog", s.Blog)
 	r.GET("/blog/posts/:id", s.BlogPost)
 }
