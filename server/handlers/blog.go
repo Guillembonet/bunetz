@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	"log/slog"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -23,23 +24,19 @@ func (*Blog) Home(c *gin.Context) {
 }
 
 func (*Blog) Blog(c *gin.Context) {
-	c.HTML(http.StatusOK, "", server.WithBase(c, blog.Blog(blog_posts.BlogPosts), "Bunetz blog",
+	c.HTML(http.StatusOK, "", server.WithBase(c, blog.Blog(blog_posts.BlogPosts), "Bunetz's Blog",
 		"Blog posts about various topics related to software engineering."))
 }
 
 func (*Blog) BlogPost(c *gin.Context) {
 	id := c.Param("id")
-	blogPost, ok := blog_posts.BlogPostsByID[id]
-	if !ok {
-		c.HTML(http.StatusNotFound, "", server.WithBase(c, error_pages.NotFound(), "Not found", ""))
-		return
-	}
-	htmlContent, err := blog_posts.GetLiveBlogPostHtml(id)
+	blogPost, htmlContent, err := blog_posts.GetLiveBlogPost(id)
 	if err != nil {
 		if errors.Is(err, blog_posts.ErrPostNotFound) {
 			c.HTML(http.StatusNotFound, "", server.WithBase(c, error_pages.NotFound(), "Not found", ""))
 			return
 		}
+		slog.Error("failed to get blog post", slog.Any("err", err), slog.String("id", id))
 		c.HTML(http.StatusInternalServerError, "", server.WithBase(c, error_pages.InternalServerError(), "Internal server error", ""))
 		return
 	}

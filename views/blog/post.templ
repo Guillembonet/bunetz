@@ -1,9 +1,9 @@
 package blog
 
 templ Post(title string, content []byte) {
-	<div class="container mx-auto mt-4 xl:px-40 lg:px-20 md:px-10 px-2">
-		<h1 class="text-4xl mb-5">{ title }</h1>
-		<div class="markdown-body">
+	<div class="container mx-auto mt-4 p-4 md:px-10 lg:px-20 xl:px-40 dark:text-white">
+		<h1 class="text-4xl py-3">{ title }</h1>
+		<div>
 			@templ.Raw(string(content))
 		</div>
 	</div>

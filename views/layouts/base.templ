@@ -1,6 +1,9 @@
 package layouts
 
-import "github.com/guillembonet/bunetz/views/components"
+import (
+	"github.com/guillembonet/bunetz/views"
+	"github.com/guillembonet/bunetz/views/components"
+)
 
 const (
 	defaultTitle = "Bunetz"
@@ -17,14 +20,51 @@ templ Base(title, description string) {
 			@descriptionMeta(description)
 			<script src="/assets/js/htmx.min.js" hx-preserve="true"></script>
 			<script src="/assets/js/head-support.min.js" hx-preserve="true" defer></script>
-			<script src="/assets/js/alpine.min.js" hx-preserve="true" defer></script>
+			<script src="/assets/js/alpine.min.js" hx-preserve="true"></script>
 			<link href="/assets/css/tailwind.css" rel="stylesheet" hx-preserve="true"/>
+			<script hx-preserve="true">
+				if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+					document.documentElement.classList.add('dark')
+				} else {
+					document.documentElement.classList.remove('dark')
+				}
+
+				function toggleTheme() {
+					let theme = localStorage.theme === 'dark' ? 'light' : 'dark'
+					if (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+						theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark'
+					}
+					
+					localStorage.theme = theme
+					document.documentElement.classList.toggle('dark', theme === 'dark')
+				}
+			</script>
 		</head>
 		<body class="antialiased min-h-screen flex flex-col" hx-ext="head-support">
 			@components.Navigation()
-			<div id="content" class="flex flex-grow" hx-on:htmx:before-swap="event.detail.shouldSwap = true; event.detail.isError = false;">
+			<div id="content" class={ "flex flex-grow " + views.DefaultBackgroundClass } hx-on:htmx:before-swap="event.detail.shouldSwap = true; event.detail.isError = false;">
 				{ children... }
 			</div>
+			<footer class="bg-white dark:bg-gray-900">
+				<div hx-boost="true" hx-target="#content" class="container flex flex-col items-center justify-between px-6 py-8 mx-auto lg:flex-row">
+					<a href="/" aria-label="Back to homepage">
+						<svg class="w-auto h-7" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+							<style>
+                                .background { fill: #4A90E2; }
+                                .letter { fill: #ffffff; font-family: Arial, sans-serif; font-size: 72px; font-weight: bold; }
+                            </style>
+							<circle class="background" cx="50" cy="50" r="50"></circle>
+							<text class="letter" x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" dy=".1em">B</text>
+						</svg>
+					</a>
+					<div class="flex flex-wrap items-center justify-center gap-4 mt-6 lg:gap-6 lg:mt-0">
+						for _, link := range components.NavigationLinks {
+							<a href={ templ.URL(link.Href) } class="text-sm text-gray-600 transition-colors duration-300 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400">{ link.Text }</a>
+						}
+					</div>
+					<p class="mt-6 text-sm text-gray-500 lg:mt-0 dark:text-gray-400">© Copyright 2024 Guillem Bonet</p>
+				</div>
+			</footer>
 		</body>
 	</html>
 }

@@ -12,20 +12,36 @@ func onlyLive(blogPosts []blog_posts.BlogPost) []blog_posts.BlogPost {
 	return livePosts
 }
 
+var livePosts = onlyLive(blog_posts.BlogPosts)
+
 templ Blog(blogPosts []blog_posts.BlogPost) {
-	<div class="container mx-2 md:mx-auto mt-4">
-		<h1 class="text-4xl mb-5">Blog</h1>
-		<h2 class="text-2xl mb-3">Welcome to my Blog! Here you can find all my blog posts</h2>
-		if len(onlyLive(blogPosts)) == 0 {
-			<div class="bg-white shadow-md rounded p-4 mt-4">
-				<p>There are no blog posts yet</p>
-			</div>
+	<div class="container mx-2 md:mx-auto mt-4 dark:text-white">
+		<h1 class="text-4xl mb-5">Bunetz's Blog</h1>
+		<h2 class="text-2xl mb-3">Welcome to my Blog!</h2>
+		<h3 class="text-lg mb-2">Here you can find all my blog posts. I intend to write about different topics related to software engineering which I believe someone might find useful.</h3>
+		if len(livePosts) == 0 {
+			<p class="mt-4">Oh! Sadly there are no blog posts yet, check again soon!</p>
 		} else {
-			for _, post := range onlyLive(blogPosts) {
-				<div hx-boost="true" hx-target="#content" class="bg-white shadow-md rounded p-4 mt-4">
-					<a href={ templ.URL("/blog/posts/" + post.ID) } class="text-2xl font-bold">{ post.Title }</a>
+			<div class="container px-6 py-10 mx-auto">
+				<div hx-boost="true" hx-target="#content" class="grid grid-cols-1 gap-8 mt-8 lg:grid-cols-2">
+					for _, post := range livePosts {
+						<div>
+							<img class="relative z-10 object-contain w-full rounded-md h-96" src={ post.PreviewImagePath } alt={ post.PreviewImageAlt }/>
+							<div class="relative z-20 max-w-lg p-6 mx-auto -mt-20 bg-white rounded-md shadow dark:bg-gray-900">
+								<a href={ templ.URL("/blog/posts/" + post.ID) } class="font-semibold text-gray-800 hover:underline md:text-xl dark:text-white">
+									{ post.Title }
+								</a>
+								<p class="mt-3 text-sm text-gray-500 dark:text-gray-300 md:text-sm">
+									{ post.Description }
+								</p>
+								<p class="mt-3 text-sm text-blue-500">
+									{ post.Date.Format("2 January 2006") }
+								</p>
+							</div>
+						</div>
+					}
 				</div>
-			}
+			</div>
 		}
 	</div>
 }
