@@ -12,8 +12,7 @@ import (
 	"github.com/guillembonet/bunetz/views/error_pages"
 )
 
-type Blog struct {
-}
+type Blog struct{}
 
 func NewBlog() *Blog {
 	return &Blog{}
@@ -24,8 +23,12 @@ func (*Blog) Home(c *gin.Context) {
 }
 
 func (*Blog) Blog(c *gin.Context) {
-	c.HTML(http.StatusOK, "", server.WithBase(c, blog.Blog(blog_posts.BlogPosts), "Bunetz's Blog",
+	c.HTML(http.StatusOK, "", server.WithBase(c, blog.Blog(), "Bunetz's Blog",
 		"Blog posts about various topics related to software engineering."))
+}
+
+func (b *Blog) BlogPosts(c *gin.Context) {
+	c.HTML(http.StatusOK, "", blog.BlogPostsCards(blog_posts.GetLiveBlogPosts()))
 }
 
 func (*Blog) BlogPost(c *gin.Context) {
@@ -46,5 +49,6 @@ func (*Blog) BlogPost(c *gin.Context) {
 func (s *Blog) Register(r *gin.RouterGroup) {
 	r.GET("/", s.Home)
 	r.GET("/blog", s.Blog)
+	r.GET("/blog/posts", s.BlogPosts)
 	r.GET("/blog/posts/:id", s.BlogPost)
 }

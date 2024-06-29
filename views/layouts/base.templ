@@ -46,7 +46,7 @@ templ Base(title, description string) {
 				{ children... }
 			</div>
 			<footer class="bg-white dark:bg-gray-900">
-				<div hx-boost="true" hx-target="#content" class="container flex flex-col items-center justify-between px-6 py-8 mx-auto lg:flex-row">
+				<div hx-boost="true" hx-target="#content" hx-swap="innerHTML show:window:top" class="container flex flex-col items-center justify-between px-6 py-8 mx-auto lg:flex-row">
 					<a href="/" aria-label="Back to homepage">
 						<svg class="w-auto h-7" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
 							<style>

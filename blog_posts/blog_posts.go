@@ -40,6 +40,7 @@ var BlogPosts = []BlogPost{
 }
 
 var BlogPostsByID = make(map[string]BlogPost, len(BlogPosts))
+var liveBlogPosts = onlyLive(BlogPosts)
 
 func GetLiveBlogPost(id string) (*BlogPost, []byte, error) {
 	post, ok := BlogPostsByID[id]
@@ -60,8 +61,23 @@ func GetLiveBlogPost(id string) (*BlogPost, []byte, error) {
 	return &post, blackfriday.Run(fileContent, blackfriday.WithRenderer(&customRenderer)), nil
 }
 
+func GetLiveBlogPosts() []BlogPost {
+	return liveBlogPosts
+}
+
+func onlyLive(blogPosts []BlogPost) []BlogPost {
+	var livePosts []BlogPost
+	for _, post := range blogPosts {
+		if post.Live {
+			livePosts = append(livePosts, post)
+		}
+	}
+	return livePosts
+}
+
 func init() {
 	for _, post := range BlogPosts {
 		BlogPostsByID[post.ID] = post
 	}
+	liveBlogPosts = onlyLive(BlogPosts)
 }

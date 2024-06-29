@@ -34,7 +34,8 @@ As I mentioned, I decided to create a 2-node Kubernetes cluster using 2 Raspberr
 
 ### Setting up the proxy server
 
-Now let's talk about the proxy server. The idea is very simple, we want to proxy HTTP, HTTPS and Kubernetes API connections. To create this proxy I used Traefik, and set it up to load-balance requests to the nodes for HTTP and HTTPS, and to direct requests to the Kubernetes API to the master node. You can find the specific configuration I used to do this in the repository I link to at the start of the post, inside of the proxy folder.
+Now let's talk about the proxy server. The idea is very simple, we want to proxy HTTP, HTTPS and Kubernetes API connections. To create this proxy I used Traefik, and set it up to load-balance requests to the nodes for HTTP and HTTPS, and to direct requests to the Kubernetes API to the master node. The HTTPS and Kubernetes API proxies have to enable TLS passthrough, so that we are able to have TLS termination in the nodes rather than in the proxy. It is also important to enable the proxy protocol in Traefik, so we can get the real IP of the client in the logs.
+You can find the specific configuration I used to do this in the repository I link to at the start of the post, inside of the proxy folder. 
 
 As an additional (and totally unneeded) flex, I also set up a proxy using mitmproxy so that I am able to send requests from the Kubernetes nodes to update the domain IP in the DNS. Of course this is totally unnecessary since my VPS does not have a dynamic IP, but it was a fun exercise. It is important to not expose the mitmproxy to the internet, as bad actors could use it for malicious purposes. To avoid this, I just blocked the port in the firewall in my cloud provider dashboard, and that way it is only accessible through the tunnel from the nodes.
 
