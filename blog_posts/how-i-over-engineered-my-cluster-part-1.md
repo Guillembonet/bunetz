@@ -37,15 +37,37 @@ As I mentioned, I decided to create a 2-node Kubernetes cluster using 2 Raspberr
 Now let's talk about the proxy server. The idea is very simple, we want to proxy HTTP, HTTPS and Kubernetes API connections. To create this proxy I used Traefik, and set it up to load-balance requests to the nodes for HTTP and HTTPS, and to direct requests to the Kubernetes API to the master node. The HTTPS and Kubernetes API proxies have to enable TLS passthrough, so that we are able to have TLS termination in the nodes rather than in the proxy. It is also important to enable the proxy protocol in Traefik, so we can get the real IP of the client in the logs.
 You can find the specific configuration I used to do this in the repository I link to at the start of the post, inside of the proxy folder. 
 
-As an additional (and totally unneeded) flex, I also set up a proxy using mitmproxy so that I am able to send requests from the Kubernetes nodes to update the domain IP in the DNS. Of course this is totally unnecessary since my VPS does not have a dynamic IP, but it was a fun exercise. It is important to not expose the mitmproxy to the internet, as bad actors could use it for malicious purposes. To avoid this, I just blocked the port in the firewall in my cloud provider dashboard, and that way it is only accessible through the tunnel from the nodes.
+As an additional (and totally unneeded) flex, I also set up a proxy using mitmproxy so that I am able to send requests from the Kubernetes nodes to update the domain's IP in the DNS with the proxy's IP rather than the actual node's IP.
+Of course this is totally unnecessary since my VPS does not have a dynamic IP, but it was a fun exercise.
+It is very important to not expose the mitmproxy to the internet, as bad actors could use it for malicious purposes. To avoid this, I just blocked the port in the firewall in my cloud provider dashboard, and that way it is only accessible through the tunnel from the nodes.
 
 That's all the setup for the proxy server. Now we have a way to access the cluster from anywhere, and we can expose services to the internet without exposing our IP address.
 
 ### Setting up the nodes
 
+The setup of the nodes is also pretty straight-forward. I just installed K3s on the master node with a few important configurations:
+
+- 1. `--tls-san bunetz.dev`: This is the domain I use to access the cluster remotely, so I have to add it as a SAN in the TLS certificate.
+- 2. `--tls-san 192.168.1.4`: This is the local IP (which I set statically) of the master node, so I can access the cluster from the local network.
+- 3. `--disable=traefik`: Traefik is included in K3s by default, but I don't want to use it for reasons I will explain in the next section.
+- 4. `--node-ip=10.1.10.1`: This is the local IP the node will advertise to the cluster. I set to use the Wireguard IP, so that the nodes communicate with each other through the tunnel.
+- 5. `--flannel-iface=k8s-tunnel`: Flannel is in charge of redirecting traffic between nodes in K3s by default. With this flag we tell Flannel to use the Wireguard interface for this purpose so that all internal cluster traffic is end to end encrypted.
+
+Of course, during this setup we will need to create the proper Wireguard configuration in the nodes to be able to communicate between them and to the proxy server. For this configuration it is important to activate keep alives in the Wireguard configuration in order to be able to communicate with the proxy server even if the nodes are behind a NAT (which is the case for most home routers) without having to set up port forwarding. A more detailed explanation of how to create and set up the Wireguard configuration can be found in the repository which I linked to at the start of the post.
+
 <div>
     <a class="text-3xl my-3 block" id="ingress">Ingress</a>
 </div>
+
+The ingress is probably one of the most over-engineered parts of the whole setup. First of all, from the very start I decided it was very important to me to be able to see real client IPs in order to be more aware of what is going on.
+This way I can have alerts if some particular IP is calling the cluster a lot in an effort to brute-force some password, for example. Another important thing for me was to have TLS encrypted traffic all the way to the nodes, so if someone could gain access to the proxy, he would still not be able to see my traffic which might contain passwords or other sensitive information.
+
+For these reasons, I found I needed to disable Traefik, since TLS termination in Traefik happens in the end node, requests which arrived to one node and were forwarded to the other were losing their forwarded IP header because Flannel, which is in charge of redirecting traffic between nodes, does not support the proxy protocol.
+Most likely, there is a way to replace Flannel with another CNI plugin which does support it or to have TLS termination as soon as traffic reaches any node, but since I struggled to find any documentation and I had experience with Nginx, I decided to go with it.
+
+To install ingress-nginx as the cluster ingress I used Helm and applied some configurations. Here comes the over-engineering:
+
+1. `enable-modsecurity: "true"`: I enabled ModSecurity to have a Web Application Firewall (WAF) in front of my services. It blocks weird requests which most likely come from bots that try to find credentials or vulnerabilities in the services, seems like people don't have a lot to do these days and like to do these things instead of just getting a job.
 
 ## What's next?
 

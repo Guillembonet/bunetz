@@ -26,7 +26,7 @@ func Echo(value string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container mx-2 md:mx-auto mt-4\"><div class=\"max-w-2xl px-8 py-4 bg-white rounded-lg shadow-md dark:bg-gray-800 mx-auto\"><div class=\"my-2\"><p class=\"text-xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container px-6 md:mx-auto mt-4\"><div class=\"max-w-2xl px-8 py-4 bg-white rounded-lg shadow-md dark:bg-gray-800 mx-auto\"><div class=\"my-2\"><p class=\"text-xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

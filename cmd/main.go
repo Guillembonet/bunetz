@@ -17,8 +17,9 @@ func main() {
 
 	static := handlers.NewStatic()
 	blog := handlers.NewBlog()
+	contact := handlers.NewContact()
 
-	server, err := server.NewServer(":8080", static, blog)
+	server, err := server.NewServer(":8080", static, blog, contact)
 	if err != nil {
 		slog.Error("failed to create server", slog.Any("err", err))
 		os.Exit(1)

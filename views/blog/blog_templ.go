@@ -28,7 +28,7 @@ func Blog() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container mx-2 md:mx-auto mt-4 dark:text-white\"><h1 class=\"text-4xl mb-5\">Bunetz's Blog</h1><h2 class=\"text-2xl mb-3\">Welcome to my Blog!</h2><h3 class=\"text-lg mb-2\">Here you can find all my blog posts. I intend to write about different topics related to software engineering which I believe someone might find useful.</h3><div hx-get=\"/blog/posts\" hx-trigger=\"load\"></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container px-6 md:mx-auto mt-4 dark:text-white\"><h1 class=\"text-4xl mb-5\">Bunetz's Blog</h1><h2 class=\"text-3xl mb-3\">Welcome to my Blog!</h2><h3 class=\"text-xl mb-2\">Here you can find all my blog posts. I intend to write about different topics related to software engineering which I believe someone might find useful.</h3><div hx-get=\"/blog/posts\" hx-trigger=\"load\" class=\"text-xl\"></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -55,7 +55,7 @@ func BlogPostsCards(blogPosts []blog_posts.BlogPost) templ.Component {
 		}
 		ctx = templ.ClearChildren(ctx)
 		if len(blogPosts) == 0 {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<p class=\"mt-4\">Oh! Sadly there are no blog posts yet, check again soon!</p>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<p class=\"my-4\">Oh! Sadly there are no blog posts yet, check again soon!</p>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -100,7 +100,7 @@ func BlogPostsCards(blogPosts []blog_posts.BlogPost) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"font-semibold text-gray-800 hover:underline md:text-xl dark:text-white\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"font-semibold text-gray-800 hover:underline dark:text-white\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
