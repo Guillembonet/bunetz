@@ -3,7 +3,7 @@ testdata_dir = "testdata"
 tmp_dir = "tmp"
 
 [build]
-  args_bin = []
+  args_bin = ["--token", "<token>", "--chat-id", "<chat_id>"]
   bin = "./build/bunetz-web"
   cmd = "go build -o ./build/bunetz-web ./cmd/main.go"
   delay = 1000
