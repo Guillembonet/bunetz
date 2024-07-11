@@ -1,7 +1,7 @@
 package components
 
 templ Navigation() {
-	<nav x-data="{ isOpen: false }" class="bg-white shadow dark:bg-gray-800">
+	<nav x-data="{ isOpen: false }" class="bg-slate-100 shadow dark:bg-gray-800">
 		<div class="container px-6 py-4 mx-auto">
 			<div class="lg:flex lg:items-center">
 				<div class="flex items-center justify-between">
@@ -27,7 +27,7 @@ templ Navigation() {
 						</button>
 					</div>
 				</div>
-				<div x-cloak :class="[isOpen ? 'translate-x-0 opacity-100 ' : 'opacity-0 -translate-x-full']" class="absolute inset-x-0 z-20 flex-1 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white dark:bg-gray-800 lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center lg:justify-between">
+				<div x-cloak :class="[isOpen ? 'translate-x-0 opacity-100 ' : 'opacity-0 -translate-x-full']" class="absolute inset-x-0 z-20 flex-1 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-slate-100 dark:bg-gray-800 lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center lg:justify-between">
 					<div hx-boost="true" hx-target="#content" hx-swap="innerHTML show:window:top" class="flex flex-col text-gray-600 capitalize dark:text-gray-300 lg:flex lg:px-16 lg:flex-row lg:items-center">
 						for _, link := range NavigationLinks {
 							<a href={ templ.URL(link.Href) } @click="isOpen = false" class="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200">{ link.Text }</a>

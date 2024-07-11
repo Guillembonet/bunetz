@@ -3,7 +3,6 @@ package about_website
 templ AboutWebsite() {
 	<div class="container text-xl px-6 md:mx-auto mt-4 dark:text-white">
 		<h1 class="text-4xl mb-6">About this website</h1>
-
 		<h2 class="text-3xl mb-6">The website</h2>
 		<p class="mb-4">
 			This website is server-side rendered using Go and the templ library, which is a Go package that allows you to create websites using templates.
@@ -20,14 +19,11 @@ templ AboutWebsite() {
 		<p class="mb-6">
 			You can find the source code of this website on <a href="https://github.com/guillembonet/bunetz" class="text-sky-600 dark:text-cyan-400 inline-block">Github</a>, for now it is private, but I will make it public when I am done with the first version.
 		</p>
-
 		<h2 class="text-3xl mb-6">Hosting it</h2>
 		<p class="mb-4">
 			The hosting of this website is also a bit special. This website is hosted on my 2-Raspberry Pi cluster (k3s) at home, but the connection is proxied through a VPS to hide my home IP and avoid port-forwards on my router.
 			I wrote a blog post about this whole setup which you can find in
-			<a href="/blog/posts/how-i-over-engineered-my-cluster-part-1" hx-boost="true" hx-target="#content" hx-swap="innerHTML show:window:top" class="text-sky-600 dark:text-cyan-400">my blog</a>
-			(available soon).
+			<a href="/blog/posts/how-i-over-engineered-my-cluster-part-1" hx-boost="true" hx-target="#content" hx-swap="innerHTML show:window:top" class="text-sky-600 dark:text-cyan-400">my blog</a>.
 		</p>
-		
 	</div>
 }

@@ -32,10 +32,10 @@ var BlogPosts = []BlogPost{
 		ID:               "how-i-over-engineered-my-cluster-part-1",
 		Title:            "How I over-engineered my Home Kubernetes Cluster: part 1",
 		Description:      "Part 1 of a series of posts about how I overengineered my home Kubernetes cluster.",
-		PreviewImagePath: "/blog/assets/kubernetes.png",
+		PreviewImagePath: "/blog/assets/kubernetes.webp",
 		PreviewImageAlt:  "Kubernetes logo",
-		Date:             time.Date(2024, 7, 1, 0, 0, 0, 0, time.UTC),
-		Live:             false,
+		Date:             time.Date(2024, 7, 11, 0, 0, 0, 0, time.UTC),
+		Live:             true,
 	},
 }
 

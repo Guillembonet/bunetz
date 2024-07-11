@@ -26,7 +26,7 @@ func Error(name, message, submessage string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"bg-white dark:bg-gray-900 flex grow\"><div class=\"container flex items-center grow px-6 py-12 mx-auto\"><div><p class=\"text-sm font-medium text-blue-500 dark:text-blue-400\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"flex grow\"><div class=\"container flex items-center grow px-6 py-12 mx-auto\"><div><p class=\"text-sm font-medium text-blue-500 dark:text-blue-400\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

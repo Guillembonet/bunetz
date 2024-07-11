@@ -56,7 +56,7 @@ func Base(title, description string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<script src=\"/assets/js/htmx.min.js\" hx-preserve=\"true\"></script><script src=\"/assets/js/head-support.min.js\" hx-preserve=\"true\" defer></script><script src=\"/assets/js/alpine.min.js\" hx-preserve=\"true\"></script><link href=\"/assets/css/tailwind.css\" rel=\"stylesheet\" hx-preserve=\"true\"><script hx-preserve=\"true\">\n\t\t\t\tif (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {\n\t\t\t\t\tdocument.documentElement.classList.add('dark')\n\t\t\t\t} else {\n\t\t\t\t\tdocument.documentElement.classList.remove('dark')\n\t\t\t\t}\n\n\t\t\t\tfunction toggleTheme() {\n\t\t\t\t\tlet theme = localStorage.theme === 'dark' ? 'light' : 'dark'\n\t\t\t\t\tif (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) {\n\t\t\t\t\t\ttheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark'\n\t\t\t\t\t}\n\t\t\t\t\t\n\t\t\t\t\tlocalStorage.theme = theme\n\t\t\t\t\tdocument.documentElement.classList.toggle('dark', theme === 'dark')\n\t\t\t\t}\n\t\t\t</script></head><body class=\"antialiased min-h-screen flex flex-col\" hx-ext=\"head-support\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<script src=\"/assets/js/htmx.min.js\" hx-preserve=\"true\"></script><script src=\"/assets/js/head-support.min.js\" hx-preserve=\"true\" defer></script><script src=\"/assets/js/alpine.min.js\" hx-preserve=\"true\"></script><link href=\"/assets/css/tailwind.css\" rel=\"stylesheet\" hx-preserve=\"true\"><script src=\"/assets/js/toastify.min.js\" hx-preserve=\"true\" defer></script><link href=\"/assets/css/toastify.min.css\" rel=\"stylesheet\" hx-preserve=\"true\"><script hx-preserve=\"true\">\n\t\t\t\tif (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {\n\t\t\t\t\tdocument.documentElement.classList.add('dark')\n\t\t\t\t} else {\n\t\t\t\t\tdocument.documentElement.classList.remove('dark')\n\t\t\t\t}\n\n\t\t\t\tfunction toggleTheme() {\n\t\t\t\t\tlet theme = localStorage.theme === 'dark' ? 'light' : 'dark'\n\t\t\t\t\tif (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) {\n\t\t\t\t\t\ttheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark'\n\t\t\t\t\t}\n\t\t\t\t\t\n\t\t\t\t\tlocalStorage.theme = theme\n\t\t\t\t\tdocument.documentElement.classList.toggle('dark', theme === 'dark')\n\t\t\t\t}\n\n\t\t\t\tfunction isServerError(request) {\n\t\t\t\t\treturn request.status >= 400\n\t\t\t\t}\n\n\t\t\t\tfunction handleServerError(event) {\n\t\t\t\t\tif (isServerError(event.detail.xhr)) {\n\t\t\t\t\t\tevent.detail.shouldSwap = true\n\t\t\t\t\t\tevent.detail.isError = false\n\t\t\t\t\t}\n\t\t\t\t}\n\n\t\t\t\tfunction errorToast(message) {\n\t\t\t\t\tToastify({\n\t\t\t\t\t\ttext: message,\n\t\t\t\t\t\tduration: 5000,\n\t\t\t\t\t\tnewWindow: true,\n\t\t\t\t\t\tclose: true,\n\t\t\t\t\t\tgravity: 'top',\n\t\t\t\t\t\tposition: 'right',\n\t\t\t\t\t\tbackgroundColor: 'red',\n\t\t\t\t\t\tstopOnFocus: true,\n\t\t\t\t\t}).showToast()\n\t\t\t\t}\n\t\t\t</script></head><body class=\"antialiased min-h-screen flex flex-col\" hx-ext=\"head-support\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -82,7 +82,7 @@ func Base(title, description string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-on:htmx:before-swap=\"event.detail.shouldSwap = true; event.detail.isError = false;\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-on:htmx:before-swap=\"handleServerError(event)\" hx-on:htmx:send-error=\"errorToast(&#39;A network error occurred&#39;)\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -90,7 +90,7 @@ func Base(title, description string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><footer class=\"bg-white dark:bg-gray-900\"><div hx-boost=\"true\" hx-target=\"#content\" hx-swap=\"innerHTML show:window:top\" class=\"container flex flex-col items-center justify-between px-6 py-8 mx-auto lg:flex-row\"><a href=\"/\" aria-label=\"Back to homepage\"><svg class=\"w-auto h-7\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\"><style>\n                                .background { fill: #4A90E2; }\n                                .letter { fill: #ffffff; font-family: Arial, sans-serif; font-size: 72px; font-weight: bold; }\n                            </style><circle class=\"background\" cx=\"50\" cy=\"50\" r=\"50\"></circle> <text class=\"letter\" x=\"50%\" y=\"50%\" text-anchor=\"middle\" dominant-baseline=\"middle\" dy=\".1em\">B</text></svg></a><div class=\"flex flex-wrap items-center justify-center gap-4 mt-6 lg:gap-6 lg:mt-0\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><footer class=\"bg-slate-100 dark:bg-gray-900\"><div hx-boost=\"true\" hx-target=\"#content\" hx-swap=\"innerHTML show:window:top\" class=\"container flex flex-col items-center justify-between px-6 py-8 mx-auto lg:flex-row\"><a href=\"/\" aria-label=\"Back to homepage\"><svg class=\"w-auto h-7\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\"><style>\n                                .background { fill: #4A90E2; }\n                                .letter { fill: #ffffff; font-family: Arial, sans-serif; font-size: 72px; font-weight: bold; }\n                            </style><circle class=\"background\" cx=\"50\" cy=\"50\" r=\"50\"></circle> <text class=\"letter\" x=\"50%\" y=\"50%\" text-anchor=\"middle\" dominant-baseline=\"middle\" dy=\".1em\">B</text></svg></a><div class=\"flex flex-wrap items-center justify-center gap-4 mt-6 lg:gap-6 lg:mt-0\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -111,7 +111,7 @@ func Base(title, description string) templ.Component {
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(link.Text)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layouts/base.templ`, Line: 62, Col: 176}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layouts/base.templ`, Line: 93, Col: 176}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -179,7 +179,7 @@ func WithBase(component templ.Component, title, description string, fullPage boo
 			var templ_7745c5c3_Var9 string
 			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(getTitle(title))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layouts/base.templ`, Line: 79, Col: 27}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layouts/base.templ`, Line: 110, Col: 27}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
@@ -232,7 +232,7 @@ func descriptionMeta(description string) templ.Component {
 			var templ_7745c5c3_Var11 string
 			templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(description)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layouts/base.templ`, Line: 88, Col: 48}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layouts/base.templ`, Line: 119, Col: 48}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 			if templ_7745c5c3_Err != nil {

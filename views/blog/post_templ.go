@@ -26,14 +26,14 @@ func Post(title string, content []byte) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container mx-auto my-4 p-4 md:px-10 lg:px-20 xl:px-40 dark:text-white\"><h1 class=\"text-4xl py-3\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container mx-auto my-4 p-4 md:px-10 lg:px-20 xl:px-40 dark:text-white\"><h1 class=\"text-4xl py-3 font-bold\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/blog/post.templ`, Line: 5, Col: 35}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/blog/post.templ`, Line: 5, Col: 45}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
