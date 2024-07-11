@@ -1,6 +1,6 @@
 ## Introduction
 
-In this series I will talk about how I overengineered my Kubernetes cluster. I used to run some services on a single Raspberry Pi 4, but I was not very confident about the reliability or security of the setup.
+In this series I will talk about how I over-engineered my Kubernetes cluster. I used to run some services on a single Raspberry Pi 4, but I was not very confident about the reliability or security of the setup.
 For this reason, and out of pure interest in Kubernetes, I decided to move to a Kubernetes cluster.
 
 Currently I have 2 Raspberry Pi (4 and 5) running a K3s cluster, with full support for metrics and alerts.
