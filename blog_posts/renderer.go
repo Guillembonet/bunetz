@@ -21,11 +21,11 @@ var customRenderer = CustomRenderer{
 		Flags: blackfriday.CommonHTMLFlags,
 	}),
 	cssClasses: map[string][]string{
-		H1Tag: {"text-4xl", "my-4"},
-		H2Tag: {"text-3xl", "my-3"},
-		H3Tag: {"text-2xl", "my-2"},
-		H4Tag: {"text-xl", "my-1"},
-		PTag:  {"my-1"},
+		H1Tag: {"text-4xl", "my-6"},
+		H2Tag: {"text-3xl", "my-4"},
+		H3Tag: {"text-2xl", "my-3"},
+		H4Tag: {"text-xl", "my-2"},
+		PTag:  {"my-2"},
 	},
 }
 

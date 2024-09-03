@@ -37,6 +37,15 @@ var BlogPosts = []BlogPost{
 		Date:             time.Date(2024, 7, 11, 0, 0, 0, 0, time.UTC),
 		Live:             true,
 	},
+	{
+		ID:               "how-i-over-engineered-my-cluster-part-2",
+		Title:            "How I over-engineered my Home Kubernetes Cluster: part 2",
+		Description:      "Part 2 of a series of posts about how I overengineered my home Kubernetes cluster.",
+		PreviewImagePath: "/blog/assets/kubernetes_2.webp",
+		PreviewImageAlt:  "Kubernetes logo",
+		Date:             time.Date(2024, 9, 3, 0, 0, 0, 0, time.UTC),
+		Live:             true,
+	},
 }
 
 var BlogPostsByID = make(map[string]BlogPost, len(BlogPosts))

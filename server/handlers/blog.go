@@ -19,7 +19,7 @@ func NewBlog() *Blog {
 }
 
 func (*Blog) Home(c *gin.Context) {
-	c.Redirect(http.StatusFound, "/blog")
+	c.Redirect(http.StatusTemporaryRedirect, "/blog")
 }
 
 func (*Blog) Blog(c *gin.Context) {

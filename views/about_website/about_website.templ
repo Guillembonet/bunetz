@@ -1,7 +1,7 @@
 package about_website
 
 templ AboutWebsite() {
-	<div class="container text-xl px-6 md:mx-auto mt-4 dark:text-white">
+	<div class="container text-xl px-6 md:mx-auto my-4 dark:text-white">
 		<h1 class="text-4xl mb-6">About this website</h1>
 		<h2 class="text-3xl mb-6">The website</h2>
 		<p class="mb-4">
@@ -24,6 +24,14 @@ templ AboutWebsite() {
 			The hosting of this website is also a bit special. This website is hosted on my 2-Raspberry Pi cluster (k3s) at home, but the connection is proxied through a VPS to hide my home IP and avoid port-forwards on my router.
 			I wrote a blog post about this whole setup which you can find in
 			<a href="/blog/posts/how-i-over-engineered-my-cluster-part-1" hx-boost="true" hx-target="#content" hx-swap="innerHTML show:window:top" class="text-sky-600 dark:text-cyan-400">my blog</a>.
+		</p>
+		<h2 class="text-3xl mb-6">Who visits this website?</h2>
+		<p class="mb-4">
+			Well, apparently you, then for sure some bots.
+			If you are curious about who is visiting this website and/or want to get a glimpse of the dashboards I build to monitor it, you can check it out
+			<a href="https://grafana.bunetz.dev/public-dashboards/d6510f84a9854d5b9adc8159779cc152" class="text-sky-600 dark:text-cyan-400 inline-block" target="_blank">
+				in this public Grafana dashboard
+			</a>. Isn't it beautiful?
 		</p>
 	</div>
 }
