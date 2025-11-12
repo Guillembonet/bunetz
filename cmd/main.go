@@ -1,13 +1,14 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"flag"
 	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
-	"syscall"
+	"sync/atomic"
 
 	"github.com/guillembonet/bunetz/external/telegram"
 	"github.com/guillembonet/bunetz/server"
@@ -34,7 +35,7 @@ func main() {
 		ChatID: *FlagChatID,
 	})
 	if err != nil {
-		slog.Error("failed to create telegram client", slog.Any("err", err))
+		slog.Error("failed to create telegram client", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
@@ -44,24 +45,36 @@ func main() {
 
 	server, err := server.NewServer(":8080", static, blog, contact)
 	if err != nil {
-		slog.Error("failed to create server", slog.Any("err", err))
+		slog.Error("failed to create server", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer cancel()
+
+	exitCode := atomic.Int32{}
+
+	stopped := make(chan struct{})
 	go func() {
+		defer close(stopped)
 		if err := server.Run(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			slog.Error("server failed", slog.Any("err", err))
-			os.Exit(1)
+			slog.Error("server failed", slog.String("error", err.Error()))
+			exitCode.Store(1)
+			cancel()
 		}
 	}()
 
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
-	<-quit
-	slog.Info("Server shutting down...")
+	<-ctx.Done()
+	slog.Info("Shutting down gracefully...")
 
 	if err := server.Stop(); err != nil {
-		slog.Error("Server failed to shutdown gracefully", slog.Any("err", err))
+		slog.Error("Server failed to shutdown gracefully", slog.String("error", err.Error()))
 		os.Exit(1)
+	}
+
+	<-stopped
+
+	if code := exitCode.Load(); code != 0 {
+		os.Exit(int(code))
 	}
 }

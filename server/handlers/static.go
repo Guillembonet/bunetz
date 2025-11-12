@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
+	"github.com/a-h/templ"
 	"github.com/guillembonet/bunetz/server"
 	"github.com/guillembonet/bunetz/views/about_me"
 	"github.com/guillembonet/bunetz/views/about_website"
@@ -11,37 +11,43 @@ import (
 )
 
 type Static struct {
+	aboutMe      templ.Component
+	aboutWebsite templ.Component
 }
 
 func NewStatic() *Static {
-	return &Static{}
-}
-
-func (*Static) AboutWebsite(c *gin.Context) {
-	c.HTML(http.StatusOK, "", server.WithBase(c, about_website.AboutWebsite(), "About this website",
-		"General information about this website."))
-}
-
-func (*Static) AboutMe(c *gin.Context) {
-	c.HTML(http.StatusOK, "", server.WithBase(c, about_me.AboutMe(), "About me",
-		"Information about me, Guillem Bonet."))
-}
-
-func (*Static) Echo(c *gin.Context) {
-	echoValue, ok := c.GetQuery("echo")
-	if !ok {
-		echoValue = "Use the query parameter 'echo' to see the value echoed back."
+	return &Static{
+		aboutMe:      about_me.AboutMe(),
+		aboutWebsite: about_website.AboutWebsite(),
 	}
+}
 
-	c.Negotiate(http.StatusOK, gin.Negotiate{
-		Offered:  []string{"application/json", "text/html"},
-		HTMLData: server.WithBase(c, echo.Echo(echoValue), "Echo", "Echo the value back."),
-		JSONData: gin.H{"echo": echoValue},
+func (s *Static) AboutWebsite() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		server.WithBase(r, s.aboutWebsite, "About this website",
+			"General information about this website.").Render(r.Context(), w)
 	})
 }
 
-func (s *Static) Register(r *gin.RouterGroup) {
-	r.GET("/about-this-website", s.AboutWebsite)
-	r.GET("/about-me", s.AboutMe)
-	r.GET("/echo", s.Echo)
+func (s *Static) AboutMe() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		server.WithBase(r, s.aboutMe, "About me",
+			"Information about me, Guillem Bonet.").Render(r.Context(), w)
+	})
+}
+
+func (*Static) Echo() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		echoValue := r.URL.Query().Get("echo")
+		if echoValue == "" {
+			echoValue = "Use the query parameter 'echo' to see the value echoed back."
+		}
+		server.WithBase(r, echo.Echo(echoValue), "Echo", "Echo the value back.").Render(r.Context(), w)
+	})
+}
+
+func (s *Static) Register(mux *http.ServeMux) {
+	mux.Handle("GET /about-this-website", s.AboutWebsite())
+	mux.Handle("GET /about-me", s.AboutMe())
+	mux.Handle("GET /echo", s.Echo())
 }

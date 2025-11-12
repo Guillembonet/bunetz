@@ -1,18 +1,15 @@
 package server
 
 import (
+	"compress/gzip"
 	"context"
-	"fmt"
-	"io/fs"
 	"net/http"
 	"time"
 
-	"github.com/gin-contrib/gzip"
-	"github.com/gin-gonic/gin"
+	chimiddleware "github.com/go-chi/chi/v5/middleware"
 	"github.com/guillembonet/bunetz/blog_posts"
 	"github.com/guillembonet/bunetz/server/middleware"
-	"github.com/guillembonet/bunetz/views/assets"
-	"github.com/guillembonet/bunetz/views/error_pages"
+	"github.com/guillembonet/bunetz/views"
 )
 
 type Server struct {
@@ -20,38 +17,29 @@ type Server struct {
 }
 
 type Handler interface {
-	Register(*gin.RouterGroup)
+	Register(*http.ServeMux)
 }
 
 func NewServer(addr string, handler ...Handler) (*Server, error) {
-	gin.SetMode(gin.ReleaseMode)
+	mux := http.NewServeMux()
 
-	g := gin.New()
-	g.Use(middleware.Logger, gin.Recovery(), middleware.AssetsCache, gzip.Gzip(gzip.DefaultCompression))
-	g.HTMLRender = &templRenderer{}
+	assetsFs := NewNeuteredFileSystem(http.FS(views.Assets))
+	mux.Handle("GET /assets/", middleware.AssetsCache(http.FileServer(assetsFs)))
 
-	g.StaticFS("/assets", http.FS(assets.Assets))
+	blogPostsAssetsFs := NewNeuteredFileSystem(http.FS(blog_posts.BlogPostAssets))
+	mux.Handle("GET /blog/assets/", http.StripPrefix("/blog", middleware.AssetsCache(http.FileServer(blogPostsAssetsFs))))
 
-	blogPostsAssets, err := fs.Sub(blog_posts.BlogPostAssets, "assets")
-	if err != nil {
-		return nil, fmt.Errorf("failed to get blog posts assets: %w", err)
-	}
-	g.StaticFS("/blog/assets", http.FS(blogPostsAssets))
-
-	rg := g.Group("/")
-
-	g.NoRoute(func(c *gin.Context) {
-		c.HTML(http.StatusNotFound, "", WithBase(c, error_pages.NotFound(), "Not found", ""))
-	})
-
+	http.StripPrefix("/blog", mux)
 	for _, h := range handler {
-		h.Register(rg)
+		h.Register(mux)
 	}
+
+	compressor := chimiddleware.NewCompressor(gzip.DefaultCompression)
 
 	return &Server{
 		server: &http.Server{
 			Addr:    addr,
-			Handler: g,
+			Handler: chimiddleware.Recoverer(middleware.Logger(compressor.Handler(mux))),
 		},
 	}, nil
 }

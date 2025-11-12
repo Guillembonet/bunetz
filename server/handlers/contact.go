@@ -3,7 +3,6 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/guillembonet/bunetz/external/telegram"
 	"github.com/guillembonet/bunetz/views/about_me"
 )
@@ -18,31 +17,35 @@ func NewContact(telegramClient *telegram.Client) *Contact {
 	}
 }
 
-func (co *Contact) Contact(c *gin.Context) {
-	name, contact, message := c.PostForm("name"), c.PostForm("contact"), c.PostForm("message")
-	if name == "" || contact == "" || message == "" {
-		nameError, contactError, messageError := "Name is required", "Contact is required", "Message is required"
-		if name != "" {
-			nameError = ""
+func (co *Contact) Contact() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		name, contact, message := r.PostFormValue("name"), r.PostFormValue("contact"), r.PostFormValue("message")
+		if name == "" || contact == "" || message == "" {
+			nameError, contactError, messageError := "Name is required", "Contact is required", "Message is required"
+			if name != "" {
+				nameError = ""
+			}
+			if contact != "" {
+				contactError = ""
+			}
+			if message != "" {
+				messageError = ""
+			}
+			w.WriteHeader(http.StatusBadRequest)
+			about_me.Contact(name, nameError, contact, contactError, message, messageError).Render(r.Context(), w)
+			return
 		}
-		if contact != "" {
-			contactError = ""
-		}
-		if message != "" {
-			messageError = ""
-		}
-		c.HTML(http.StatusBadRequest, "", about_me.Contact(name, nameError, contact, contactError, message, messageError))
-		return
-	}
 
-	if err := co.telegramClient.SendMessage(name, contact, message); err != nil {
-		c.HTML(http.StatusInternalServerError, "", about_me.Contact(name, "", contact, "", message, "Failed to send message"))
-		return
-	}
+		if err := co.telegramClient.SendMessage(name, contact, message); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			about_me.Contact(name, "", contact, "", message, "Failed to send message").Render(r.Context(), w)
+			return
+		}
 
-	c.HTML(http.StatusOK, "", about_me.ContactSuccess())
+		about_me.ContactSuccess().Render(r.Context(), w)
+	})
 }
 
-func (co *Contact) Register(r *gin.RouterGroup) {
-	r.POST("/contact", co.Contact)
+func (co *Contact) Register(mux *http.ServeMux) {
+	mux.Handle("POST /contact", co.Contact())
 }
