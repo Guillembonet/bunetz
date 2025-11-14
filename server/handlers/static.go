@@ -23,17 +23,13 @@ func NewStatic() *Static {
 }
 
 func (s *Static) AboutWebsite() http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		server.WithBase(r, s.aboutWebsite, "About this website",
-			"General information about this website.").Render(r.Context(), w)
-	})
+	return server.WithBase(s.aboutWebsite, "About this website",
+		"General information about this website.")
 }
 
 func (s *Static) AboutMe() http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		server.WithBase(r, s.aboutMe, "About me",
-			"Information about me, Guillem Bonet.").Render(r.Context(), w)
-	})
+	return server.WithBase(s.aboutMe, "About me",
+		"Information about me, Guillem Bonet.")
 }
 
 func (*Static) Echo() http.Handler {
@@ -42,7 +38,7 @@ func (*Static) Echo() http.Handler {
 		if echoValue == "" {
 			echoValue = "Use the query parameter 'echo' to see the value echoed back."
 		}
-		server.WithBase(r, echo.Echo(echoValue), "Echo", "Echo the value back.").Render(r.Context(), w)
+		server.WithBase(echo.Echo(echoValue), "Echo", "Echo the value back.").ServeHTTP(w, r)
 	})
 }
 

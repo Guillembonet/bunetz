@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/a-h/templ"
 	"github.com/guillembonet/bunetz/external/telegram"
 	"github.com/guillembonet/bunetz/views/about_me"
 )
@@ -31,18 +32,18 @@ func (co *Contact) Contact() http.Handler {
 			if message != "" {
 				messageError = ""
 			}
-			w.WriteHeader(http.StatusBadRequest)
-			about_me.Contact(name, nameError, contact, contactError, message, messageError).Render(r.Context(), w)
+			templ.Handler(about_me.Contact(name, nameError, contact, contactError, message, messageError),
+				templ.WithStatus(http.StatusBadRequest)).ServeHTTP(w, r)
 			return
 		}
 
 		if err := co.telegramClient.SendMessage(name, contact, message); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			about_me.Contact(name, "", contact, "", message, "Failed to send message").Render(r.Context(), w)
+			templ.Handler(about_me.Contact(name, "", contact, "", message, "Failed to send message"),
+				templ.WithStatus(http.StatusInternalServerError)).ServeHTTP(w, r)
 			return
 		}
 
-		about_me.ContactSuccess().Render(r.Context(), w)
+		templ.Handler(about_me.ContactSuccess()).ServeHTTP(w, r)
 	})
 }
 

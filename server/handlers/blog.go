@@ -29,8 +29,7 @@ func NewBlog() *Blog {
 func (b *Blog) Home() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
-			w.WriteHeader(http.StatusNotFound)
-			server.WithBase(r, b.notFound, "Not found", "").Render(r.Context(), w)
+			server.WithBase(b.notFound, "Not found", "", templ.WithStatus(http.StatusNotFound)).ServeHTTP(w, r)
 			return
 		}
 		http.Redirect(w, r, "/blog", http.StatusTemporaryRedirect)
@@ -38,16 +37,12 @@ func (b *Blog) Home() http.Handler {
 }
 
 func (b *Blog) Blog() http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		server.WithBase(r, b.blog, "Bunetz's Blog",
-			"Blog posts about various topics related to software engineering.").Render(r.Context(), w)
-	})
+	return server.WithBase(b.blog, "Bunetz's Blog",
+		"Blog posts about various topics related to software engineering.")
 }
 
 func (b *Blog) BlogPosts() http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		blog.BlogPostsCards(blog_posts.GetLiveBlogPosts()).Render(r.Context(), w)
-	})
+	return templ.Handler(blog.BlogPostsCards(blog_posts.GetLiveBlogPosts()))
 }
 
 func (b *Blog) BlogPost() http.Handler {
@@ -56,16 +51,14 @@ func (b *Blog) BlogPost() http.Handler {
 		blogPost, htmlContent, err := blog_posts.GetLiveBlogPost(id)
 		if err != nil {
 			if errors.Is(err, blog_posts.ErrPostNotFound) {
-				w.WriteHeader(http.StatusNotFound)
-				server.WithBase(r, b.notFound, "Not found", "").Render(r.Context(), w)
+				server.WithBase(b.notFound, "Not found", "", templ.WithStatus(http.StatusNotFound)).ServeHTTP(w, r)
 				return
 			}
 			slog.Error("failed to get blog post", slog.String("error", err.Error()), slog.String("id", id))
-			w.WriteHeader(http.StatusInternalServerError)
-			server.WithBase(r, b.internalServerError, "Internal server error", "").Render(r.Context(), w)
+			server.WithBase(b.internalServerError, "Internal server error", "", templ.WithStatus(http.StatusInternalServerError)).ServeHTTP(w, r)
 			return
 		}
-		server.WithBase(r, blog.Post(blogPost.Title, htmlContent), blogPost.Title, blogPost.Description).Render(r.Context(), w)
+		server.WithBase(blog.Post(blogPost.Title, htmlContent), blogPost.Title, blogPost.Description).ServeHTTP(w, r)
 	})
 }
 
